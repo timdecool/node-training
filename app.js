@@ -29,5 +29,11 @@ const displayResults = (req, res) => {
 app.use('/',express.static('public'))
 app.get('/api', displayResults);
 app.post('/api', (req, res) => {
-  console.log(req.body)
+  connection.query(
+    `INSERT INTO images (src,title,description,author,author_link) VALUES (?,?,?,?,?)`,
+    [req.body.src, req.body.title,req.body.description,req.body.author,req.body.author_link],
+    function(err, results, field) {
+      res.redirect('/');
+    }
+  );
 });
