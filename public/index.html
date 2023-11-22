@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galerie</title>
+
+    <style>
+        #gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        form {
+            margin: 30px;
+        }
+
+        .card-img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            width: 30%;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            border: 1px solid lightgrey;
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            padding: 10px;
+            height: 100%;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Salut la team !</h1>
+    <form method="post" action="/api" enctype="application/x-www-form-urlencoded">
+        <input type="text" name="title" id="title">
+        <input type="submit" value="Envoyer">
+    </form>
+    <div id="gallery"></div>
+
+    <script>
+        const gallery = document.querySelector('#gallery');
+        async function showPictures() {
+            const res = await fetch('api?page=1&limit=9')
+            const pictures = await res.json();
+            console.log(pictures);
+            
+            for(pic of pictures) {
+                // Create card
+                const card = document.createElement('article');
+                gallery.appendChild(card);
+                card.classList.add('card');
+
+                // Add image
+                const img = document.createElement('img');
+                card.appendChild(img);
+                img.src = pic.src;
+                img.alt = pic.title;
+                img.classList.add('card-img');
+
+                // Add title
+                const title = document.createElement('div');
+                title.textContent = pic.title;
+                title.classList.add('card-title');
+                card.appendChild(title);
+            }
+        }
+        showPictures();
+    </script>    
+</body>
+</html>
